@@ -1,11 +1,9 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26430.12
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{7D73A494-CAEF-68D9-7A36-DACA4CA40E71}"
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Proj1", "Assembly-CSharp.csproj", "{7D73A494-CAEF-68D9-7A36-DACA4CA40E71}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "Assembly-CSharp-Editor.csproj", "{C010DB8A-635E-38C9-3A9D-A973CF85E641}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Proj1", "Assembly-CSharp-Editor.csproj", "{C010DB8A-635E-38C9-3A9D-A973CF85E641}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
