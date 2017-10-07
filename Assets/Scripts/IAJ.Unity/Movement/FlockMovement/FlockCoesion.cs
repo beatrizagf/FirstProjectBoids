@@ -27,7 +27,7 @@ namespace Assets.Scripts.IAJ.Unity.Movement.FlockMovement {
 					direction -= Character.Position;
 					if (direction.magnitude <= Radius) {
 						var angle = MathHelper.ConvertVectorToOrientation(direction);
-						var angleDifference = ShortestAngleDifference(Character.Orientation, angle);
+						var angleDifference = MathHelper.ShortestAngleDifference(Character.Orientation, angle);
 						if (Math.Abs(angleDifference) <= FanAngle) {
 							massCenter += boid.Position;
 							closeBoids++;
@@ -40,13 +40,6 @@ namespace Assets.Scripts.IAJ.Unity.Movement.FlockMovement {
 			Target.Position = massCenter;
 
 			return new MovementOutput();
-		}
-
-		public float ShortestAngleDifference(float source, float target) {
-			var delta = target - source;
-			if (delta > MathConstants.MATH_PI) delta -= 360;
-			else if (delta < -MathConstants.MATH_PI) delta += 360;
-			return delta;
 		}
 	}
 }
