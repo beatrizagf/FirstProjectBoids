@@ -1,4 +1,5 @@
-﻿namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
+﻿using Assets.Scripts.IAJ.Unity.Movement;
+namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
 {
     public class DynamicVelocityMatch : DynamicMovement
     {
@@ -8,11 +9,14 @@
         }
 
         public float TimeToTargetSpeed { get; set; }
+        public KinematicData Mtaget { get; set; }
 
         public DynamicVelocityMatch()
         {
+			Target = new KinematicData();
             this.TimeToTargetSpeed = 0.5f;
             this.Output = new MovementOutput();
+            
         }
         public override MovementOutput GetMovement()
         {

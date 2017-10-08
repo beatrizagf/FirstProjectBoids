@@ -1,0 +1,16 @@
+﻿<Properties StartupItem="Assembly-CSharp.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\IAJ.Unity\Movement\DynamicMovement\DynamicVelocityMatch.cs">
+    <Files>
+      <File FileName="Assets\Scripts\IAJ.Unity\Movement\DynamicMovement\DynamicVelocityMatch.cs" Line="15" Column="1" />
+      <File FileName="Assets\Scripts\IAJ.Unity\Movement\FlockMovement\FlockVelocityMatching.cs" Line="34" Column="10" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="C:\Users\PC-ASUS\Documents\IST\IAJ\Proj1-Master\Assets\Scripts\IAJ.Unity\Movement\DynamicMovement\DynamicVelocityMatch.cs" line="15" column="10" />
+      <Breakpoint file="C:\Users\PC-ASUS\Documents\IST\IAJ\Proj1-Master\Assets\Scripts\IAJ.Unity\Movement\DynamicMovement\DynamicVelocityMatch.cs" line="16" column="1" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
