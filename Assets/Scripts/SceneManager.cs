@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.IAJ.Unity.Movement.Arbitration;
+using Assets.Scripts.IAJ.Unity.Util;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -37,7 +38,7 @@ public class SceneManager : MonoBehaviour
         
 	    var obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
 
-	    this.characterControllers = this.CloneCharacters(this.characterGameObject, 50, obstacles);
+	    this.characterControllers = this.CloneCharacters(this.characterGameObject, (int)Random.Range(1, 50), obstacles);
         this.characterControllers.Add(this.characterGameObject.GetComponent<FlockCharacterController>());
 
         //LINQ expression with a lambda function, returns an array with the DynamicCharacter for each secondary character controler
@@ -62,8 +63,9 @@ public class SceneManager : MonoBehaviour
             var clone = GameObject.Instantiate(objectToClone);
             var Controller = clone.GetComponent<FlockCharacterController>();
             Controller.character.KinematicData.Position = this.GenerateRandomClearPosition(obstacles);
-            
-            characters.Add(Controller);
+			Controller.character.KinematicData.velocity = GenerateRandomVelocity();
+			Controller.character.KinematicData.Orientation = MathHelper.ConvertVectorToOrientation(Controller.character.KinematicData.velocity);
+			characters.Add(Controller);
         }
 
         return characters;
@@ -98,8 +100,8 @@ public class SceneManager : MonoBehaviour
 
 	private Vector3 GenerateRandomVelocity() {
 		var velocity = new Vector3();
-		velocity.x = Random.Range(0, MAX_SPEED);
-		velocity.z = Random.Range(0, MAX_SPEED);
+		velocity.x = Random.Range(0.0f, MAX_SPEED);
+		velocity.z = Random.Range(0.0f, MAX_SPEED);
 		if (velocity.sqrMagnitude > MAX_SPEED * MAX_SPEED) {
 			velocity.Normalize();
 			velocity *= MAX_SPEED;
