@@ -6,28 +6,44 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
 
 public class FlockSeparation : DynamicMovement
 {
+
+        //in order to no collide with each other
     public override string Name
     {
         get { return "FlockSeparation"; }
     }
 
-    public float TimeToTargetSpeed { get; set; }
+    public float Radius { get; set; }
+    public float SeparationFactor { get; set; }
+    public KinematicData Boid { get; set; }
 
-    public FlockSeparation()
+
+        public FlockSeparation(KinematicData otherCharacter)
     {
-        this.TimeToTargetSpeed = 0.5f;
+        this.Radius = 1.0f;
+        this.SeparationFactor = 1.0f;
+        this.Boid = otherCharacter;
         this.Output = new MovementOutput();
     }
     public override MovementOutput GetMovement()
     {
 
-           // foreach () {
-            //}
+            Vector3 Direction = this.Character.Position - this.Boid.Position;
+            //Direction.magnitude = distancia
+            if (Direction.magnitude < Radius) {
+                float SeparationStrength = Mathf.Min(this.SeparationFactor / (Direction.magnitude * Direction.magnitude), MaxAcceleration);
+                this.Output.linear += Direction.normalized * SeparationStrength;
+            }
+                
+            
 
-        this.Output.linear = (this.Target.velocity - this.Character.velocity) / this.TimeToTargetSpeed;
+            if (this.Output.linear.magnitude > this.MaxAcceleration) {
+                this.Output.linear=this.Output.linear.normalized;
+                this.Output.linear *= this.MaxAcceleration;
+            }
 
         return this.Output;
     }
 }
 }
-}
+
