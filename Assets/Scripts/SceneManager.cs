@@ -96,7 +96,17 @@ public class SceneManager : MonoBehaviour
         return position;
     }
 
-	
+	private Vector3 GenerateRandomVelocity() {
+		var velocity = new Vector3();
+		velocity.x = Random.Range(0, MAX_SPEED);
+		velocity.z = Random.Range(0, MAX_SPEED);
+		if (velocity.sqrMagnitude > MAX_SPEED * MAX_SPEED) {
+			velocity.Normalize();
+			velocity *= MAX_SPEED;
+		}
+		return velocity;
+	}
 
-    
+
+
 }
