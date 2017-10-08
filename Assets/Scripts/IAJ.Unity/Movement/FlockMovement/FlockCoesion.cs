@@ -40,7 +40,7 @@ namespace Assets.Scripts.IAJ.Unity.Movement.FlockMovement {
 			massCenter = massCenter * (1/closeBoids);
 			this.Target.Position = massCenter;
 
-			return new MovementOutput();
+			return base.GetMovement();
 		}
 	}
 }
