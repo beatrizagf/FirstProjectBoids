@@ -12,7 +12,7 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement {
 		public KinematicData RealTarget { get; set; }
 
 		public DynamicArrive() {
-			//FakeTarget = new KinematicData();
+			Target = new KinematicData();
 			StopRadius = 3.0f;
 			SlowRadius = 30.0f;
 		}
@@ -21,7 +21,7 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement {
 			float targetSpeed;
 			
 
-			Vector3 direction = Target.Position - Character.Position;
+			Vector3 direction = RealTarget.Position - Character.Position;
 			float distance = direction.magnitude;
 
 			if(distance < StopRadius) {
