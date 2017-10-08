@@ -38,7 +38,7 @@ namespace Assets.Scripts.IAJ.Unity.Movement.FlockMovement {
 			}
 			if (closeBoids == 0) return new MovementOutput();
 			massCenter = massCenter * (1/closeBoids);
-			Target.Position = massCenter;
+			this.Target.Position = massCenter;
 
 			return new MovementOutput();
 		}

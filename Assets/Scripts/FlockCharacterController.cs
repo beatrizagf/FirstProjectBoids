@@ -53,21 +53,21 @@ public class FlockCharacterController : MonoBehaviour
 		foreach (var obstacle in obstacles)
 		{
 			//TODO: add your AvoidObstacle movement here
-			var avoidObstacleMovement = new DynamicAvoidObstacle(obstacle.GetComponent<Collider>()) {
+			/*var avoidObstacleMovement = new DynamicAvoidObstacle(obstacle.GetComponent<Collider>()) {
 				MaxAcceleration = MAX_ACCELERATION,
 				AvoidMargin = AVOID_MARGIN,
 				MaxLookAhead = MAX_LOOK_AHEAD,
 				Character = this.character.KinematicData,
 				DebugColor = Color.magenta
 			};
-			this.blendedMovement.Movements.Add(new MovementWithWeight(avoidObstacleMovement, 5.0f));
+			this.blendedMovement.Movements.Add(new MovementWithWeight(avoidObstacleMovement, 5.0f));*/
 		}
 
 		foreach (var otherCharacter in characters)
 		{
 			if (otherCharacter != this.character)
 			{
-				//TODO: add your AvoidCharacter movement here
+				//Flock separation movement
 				var flockSeparation = new FlockSeparation(otherCharacter.KinematicData)
 				{
 					Character = this.character.KinematicData,
@@ -75,7 +75,27 @@ public class FlockCharacterController : MonoBehaviour
 					DebugColor = Color.cyan
 				};
 				this.blendedMovement.Movements.Add(new MovementWithWeight(flockSeparation, 5.0f));
-			}
+/*
+                //Flock coesion movement
+                var flockCoesion = new FlockCoesion()
+                {
+                    Flock = characters,
+                    Radius = COESION_RADIUS,
+                    FanAngle = COESION_FAN_ANGLE
+                };
+                this.blendedMovement.Movements.Add(new MovementWithWeight(flockCoesion, 5.0f));
+
+
+                //Flock velocity matching movement
+                var flockVelocityMatching = new FlockVelocityMatching()
+                {
+                    Flock = characters,
+                    Radius = COESION_RADIUS,
+                    FanAngle = COESION_FAN_ANGLE
+                };
+                this.blendedMovement.Movements.Add(new MovementWithWeight(flockVelocityMatching, 5.0f));*/
+            }
+
 		}
 
 		var flockCoesion = new FlockCoesion() {
@@ -92,8 +112,8 @@ public class FlockCharacterController : MonoBehaviour
 		};
 		this.blendedMovement.Movements.Add(new MovementWithWeight(flockVelocityMatching, 5.0f));
 
-		/*
-		 * TODO: add your wander behaviour here!*/
+		
+		 // TODO: add your wander behaviour here!
 		var wander = new DynamicWander {
 			MaxAcceleration = MAX_ACCELERATION,
 			WanderOffset = 5,
@@ -104,7 +124,7 @@ public class FlockCharacterController : MonoBehaviour
 		};
 		this.blendedMovement.Movements.Add(new MovementWithWeight(wander, 1));
 
-		this.character.Movement = this.blendedMovement;
+		this.character.Movement = this.blendedMovement; 
 	}
 
 
