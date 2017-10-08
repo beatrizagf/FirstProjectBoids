@@ -38,7 +38,7 @@ public class SceneManager : MonoBehaviour
         
 	    var obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
 
-	    this.characterControllers = this.CloneCharacters(this.characterGameObject, (int)Random.Range(1, 50), obstacles);
+	    this.characterControllers = this.CloneCharacters(this.characterGameObject, 50, obstacles);
         this.characterControllers.Add(this.characterGameObject.GetComponent<FlockCharacterController>());
 
         //LINQ expression with a lambda function, returns an array with the DynamicCharacter for each secondary character controler
