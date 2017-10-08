@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Assets.Scripts.IAJ.Unity.Movement.DynamicMovement;
 using Assets.Scripts.IAJ.Unity.Movement.Arbitration;
-//using Assets.Scripts.IAJ.Unity.Movement.FlockMovement;
+using Assets.Scripts.IAJ.Unity.Movement.FlockMovement;
 using System.Collections.Generic;
 
 public class FlockCharacterController : MonoBehaviour
@@ -16,6 +16,8 @@ public class FlockCharacterController : MonoBehaviour
 	private const float DRAG = 0.1f;
 	private const float AVOID_MARGIN = 18.0f;
 	private const float MAX_LOOK_AHEAD = 20.0f;
+	private const float COESION_RADIUS = 5.0f;
+	private const float COESION_FAN_ANGLE = MathConstants.MATH_PI_2;
 
 
 
@@ -81,8 +83,20 @@ public class FlockCharacterController : MonoBehaviour
 			}
 		}
 
-			/*
-			 * TODO: add your wander behaviour here!*/
+		var flockCoesion = new FlockCoesion() {
+			Radius = COESION_RADIUS,
+			FanAngle = COESION_FAN_ANGLE
+		};
+		this.blendedMovement.Movements.Add(new MovementWithWeight(flockCoesion, 5.0f));
+
+		var flockVelocityMatching = new FlockVelocityMatching() {
+			Radius = COESION_RADIUS,
+			FanAngle = COESION_FAN_ANGLE
+		};
+		this.blendedMovement.Movements.Add(new MovementWithWeight(flockVelocityMatching, 5.0f));
+
+		/*
+		 * TODO: add your wander behaviour here!*/
 		var wander = new DynamicWander {
 			MaxAcceleration = MAX_ACCELERATION,
 			WanderOffset = 5,
@@ -91,75 +105,70 @@ public class FlockCharacterController : MonoBehaviour
 			Character = this.character.KinematicData,
 			DebugColor = Color.yellow
 		};
-
 		this.blendedMovement.Movements.Add(new MovementWithWeight(wander, 1));
 
 		this.character.Movement = this.blendedMovement;
+	}
 
+
+	void Update()
+	{
+		if (Input.GetKeyDown(this.stopKey))
+		{
+			this.character.Movement = null;
+		}
+		else if (Input.GetKeyDown(this.blendedKey))
+		{
+			this.character.Movement = this.blendedMovement;
 		}
 
 
-		void Update()
+		this.UpdateMovingGameObject();
+		this.UpdateMovementText();
+	}
+
+
+	void OnDrawGizmos()
+	{
+		//TODO: this code is not working, try to figure it out
+		if (this.character != null && this.character.Movement != null)
 		{
-			if (Input.GetKeyDown(this.stopKey))
+			//for blending movement
+			if (this.character.Movement == this.blendedMovement)
 			{
-				this.character.Movement = null;
-			}
-			else if (Input.GetKeyDown(this.blendedKey))
-			{
-				this.character.Movement = this.blendedMovement;
-			}
+				var blender = this.character.Movement as BlendedMovement;
+				var wander = blender.Movements.Find(x => x.Movement is DynamicWander).Movement as DynamicWander;
 
-
-			this.UpdateMovingGameObject();
-			this.UpdateMovementText();
-		}
-
-
-
-
-		void OnDrawGizmos()
-		{
-			//TODO: this code is not working, try to figure it out
-			if (this.character != null && this.character.Movement != null)
-			{
-				//for blending movement
-				if (this.character.Movement == this.blendedMovement)
+				if (wander != null)
 				{
-					var blender = this.character.Movement as BlendedMovement;
-					var wander = blender.Movements.Find(x => x.Movement is DynamicWander).Movement as DynamicWander;
-
-					if (wander != null)
-					{
-						Gizmos.color = Color.blue;
-						Gizmos.DrawWireSphere(wander.CircleCenter, wander.WanderRadius);
-					}
+					Gizmos.color = Color.blue;
+					Gizmos.DrawWireSphere(wander.CircleCenter, wander.WanderRadius);
 				}
-
 			}
-		}
 
-		private void UpdateMovingGameObject()
+		}
+	}
+
+	private void UpdateMovingGameObject()
+	{
+		if (this.character.Movement != null)
 		{
-			if (this.character.Movement != null)
-			{
-				this.character.Update();
-				this.character.KinematicData.ApplyWorldLimit(X_WORLD_SIZE, Z_WORLD_SIZE);
-			}
+			this.character.Update();
+			this.character.KinematicData.ApplyWorldLimit(X_WORLD_SIZE, Z_WORLD_SIZE);
 		}
+	}
 
-		private void UpdateMovementText()
+	private void UpdateMovementText()
+	{
+		if (this.character.Movement == null)
 		{
-			if (this.character.Movement == null)
-			{
-				this.movementTextText.text = this.name + " Movement: Stationary";
-			}
-			else
-			{
-				this.movementTextText.text = this.name + " Movement: " + this.character.Movement.Name;
-			}
+			this.movementTextText.text = this.name + " Movement: Stationary";
 		}
-
+		else
+		{
+			this.movementTextText.text = this.name + " Movement: " + this.character.Movement.Name;
+		}
 	}
 }
+
 
