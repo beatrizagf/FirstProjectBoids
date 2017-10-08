@@ -7,7 +7,7 @@ using Assets.Scripts.IAJ.Unity.Movement.DynamicMovement;
 
 namespace Assets.Scripts.IAJ.Unity.Movement.FlockMovement {
 	public class FlockVelocityMatching : DynamicVelocityMatch {
-		public KinematicData[] Flock;
+		public List<DynamicCharacter> Flock;
 		public float Radius;
 		public float FanAngle;
 
@@ -16,17 +16,16 @@ namespace Assets.Scripts.IAJ.Unity.Movement.FlockMovement {
 			var averageVelocity = new Vector3();
 			int closeBoids = 0;
 
-			foreach (var boid in Flock) {
-				if (Character != boid) {
-					var direction = boid.Position;
-					direction -= Character.Position;
-					if (direction.magnitude <= Radius) {
-						var angle = MathHelper.ConvertVectorToOrientation(direction);
-						var angleDifference = MathHelper.ShortestAngleDifference(Character.Orientation, angle);
-						if (Math.Abs(angleDifference) <= FanAngle) {
-							averageVelocity += boid.velocity;
-							closeBoids++;
-						}
+			foreach (var dBoid in Flock) {
+				var boid = dBoid.KinematicData;
+				var direction = boid.Position;
+				direction -= Character.Position;
+				if (direction.magnitude <= Radius) {
+					var angle = MathHelper.ConvertVectorToOrientation(direction);
+					var angleDifference = MathHelper.ShortestAngleDifference(Character.Orientation, angle);
+					if (Math.Abs(angleDifference) <= FanAngle) {
+						averageVelocity += boid.velocity;
+						closeBoids++;
 					}
 				}
 			}

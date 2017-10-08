@@ -7,7 +7,7 @@ using System;
 
 namespace Assets.Scripts.IAJ.Unity.Movement.FlockMovement {
 	public class FlockCoesion : DynamicArrive {
-		KinematicData[] Flock;
+		public List<DynamicCharacter> Flock;
 		public float Radius;
 		public float FanAngle;
 
@@ -21,7 +21,8 @@ namespace Assets.Scripts.IAJ.Unity.Movement.FlockMovement {
 			Vector3 direction = new Vector3();
 			float closeBoids = 0;
 
-			foreach (var boid in Flock) {
+			foreach (var dBoid in Flock) {
+				var boid = dBoid.KinematicData;
 				if (Character != boid) {
 					direction = boid.Position;
 					direction -= Character.Position;

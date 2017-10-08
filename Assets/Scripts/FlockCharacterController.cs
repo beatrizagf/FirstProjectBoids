@@ -20,11 +20,6 @@ public class FlockCharacterController : MonoBehaviour
 	private const float COESION_FAN_ANGLE = MathConstants.MATH_PI_2;
 
 
-
-
-
-
-
 	public KeyCode stopKey = KeyCode.S;
 	public KeyCode blendedKey = KeyCode.B;
 
@@ -84,12 +79,14 @@ public class FlockCharacterController : MonoBehaviour
 		}
 
 		var flockCoesion = new FlockCoesion() {
+			Flock = characters,
 			Radius = COESION_RADIUS,
 			FanAngle = COESION_FAN_ANGLE
 		};
 		this.blendedMovement.Movements.Add(new MovementWithWeight(flockCoesion, 5.0f));
 
 		var flockVelocityMatching = new FlockVelocityMatching() {
+			Flock = characters,
 			Radius = COESION_RADIUS,
 			FanAngle = COESION_FAN_ANGLE
 		};
