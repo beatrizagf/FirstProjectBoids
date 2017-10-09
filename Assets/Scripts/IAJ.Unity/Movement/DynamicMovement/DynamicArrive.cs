@@ -28,10 +28,8 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement {
 			} else {
 				targetSpeed = MaxSpeed * (distance / SlowRadius);
 			}
-			Target = new KinematicData();
+			
 			Target.velocity = direction.normalized * targetSpeed;
-
-
 			return base.GetMovement();
 		}
 	}

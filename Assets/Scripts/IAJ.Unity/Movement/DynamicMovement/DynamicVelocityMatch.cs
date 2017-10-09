@@ -13,7 +13,7 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
 
         public DynamicVelocityMatch()
         {
-			Target = new KinematicData();
+			//Target = new KinematicData();
             this.TimeToTargetSpeed = 0.5f;
             this.Output = new MovementOutput();
             

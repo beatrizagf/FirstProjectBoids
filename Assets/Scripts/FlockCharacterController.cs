@@ -99,6 +99,8 @@ public class FlockCharacterController : MonoBehaviour
 
         var flockCoesion = new FlockCoesion() {
 			Character = this.character.KinematicData,
+			Target = new KinematicData(),
+			RealTarget = new KinematicData(),
 			Flock = characters,
 			CRadius = COESION_RADIUS,
 			FanAngle = COESION_FAN_ANGLE,
@@ -111,11 +113,12 @@ public class FlockCharacterController : MonoBehaviour
 
 		var flockVelocityMatching = new FlockVelocityMatching() {
 			Character = this.character.KinematicData,
+			Target = new KinematicData(),
 			Flock = characters,
 			Radius = MATCHING_RADIUS,
 			FanAngle = MATCHING_FAN_ANGLE
 		};
-		this.blendedMovement.Movements.Add(new MovementWithWeight(flockVelocityMatching, 4.0f));
+		this.blendedMovement.Movements.Add(new MovementWithWeight(flockVelocityMatching, 40.0f));
 
 
 		var straightAhead = new DynamicStraightAhead() { Character = this.character.KinematicData };
@@ -143,6 +146,8 @@ public class FlockCharacterController : MonoBehaviour
 
 		var DynamicArriveMovement = new GoToMouse() {
 			Character = this.character.KinematicData,
+			Target = new KinematicData(),
+			RealTarget = new KinematicData(),
 			MaxAcceleration = MAX_ACCELERATION,
 			MaxSpeed = MAX_SPEED,
 			StopRadius = ARRIVE_STOP_RADIUS,
