@@ -14,12 +14,12 @@ public class FlockCharacterController : MonoBehaviour
 	private const float MAX_ACCELERATION = 40.0f;
 	private const float MAX_SPEED = 20.0f;
 	private const float DRAG = 0.1f;
-	private const float AVOID_MARGIN = 18.0f;
-	private const float MAX_LOOK_AHEAD = 20.0f;
-	private const float COESION_RADIUS = 5.0f;
-	private const float MATCHING_RADIUS = 5.0f;
-	private const float SEPARATION_RADIUS = 5.0f;
-	private const float SEPARATION_FACTOR = 5.0f;
+	private const float AVOID_MARGIN = 4.0f;
+	private const float MAX_LOOK_AHEAD = 10.0f;
+	private const float COESION_RADIUS = 15.0f;
+	private const float MATCHING_RADIUS = 20.0f;
+	private const float SEPARATION_RADIUS = 10.0f;
+	private const float SEPARATION_FACTOR = MAX_ACCELERATION * 1.3f;
 	private const float COESION_FAN_ANGLE = MathConstants.MATH_PI_2;
 	private const float MATCHING_FAN_ANGLE = MathConstants.MATH_PI_2;
 
@@ -57,14 +57,14 @@ public class FlockCharacterController : MonoBehaviour
 		foreach (var obstacle in obstacles)
 		{
 			//TODO: add your AvoidObstacle movement here
-			/*var avoidObstacleMovement = new DynamicAvoidObstacle(obstacle.GetComponent<Collider>()) {
+			var avoidObstacleMovement = new DynamicAvoidObstacle(obstacle.GetComponent<Collider>()) {
 				MaxAcceleration = MAX_ACCELERATION,
 				AvoidMargin = AVOID_MARGIN,
 				MaxLookAhead = MAX_LOOK_AHEAD,
 				Character = this.character.KinematicData,
 				DebugColor = Color.magenta
 			};
-			this.blendedMovement.Movements.Add(new MovementWithWeight(avoidObstacleMovement, 5.0f));*/
+			this.blendedMovement.Movements.Add(new MovementWithWeight(avoidObstacleMovement, 15.0f));
 		}
 
 		foreach (var otherCharacter in characters)
@@ -72,35 +72,15 @@ public class FlockCharacterController : MonoBehaviour
 			if (otherCharacter != this.character)
 			{
 				//Flock separation movement
-				var flockSeparation = new FlockSeparation(otherCharacter.KinematicData)
-				{
+				var flockSeparation = new FlockSeparation(otherCharacter.KinematicData) {
 					Character = this.character.KinematicData,
 					MaxAcceleration = MAX_ACCELERATION,
 					Radius = SEPARATION_RADIUS,
 					SeparationFactor = SEPARATION_FACTOR,
 					DebugColor = Color.cyan
 				};
-				this.blendedMovement.Movements.Add(new MovementWithWeight(flockSeparation, 5.0f));
-/*
-                //Flock coesion movement
-                var flockCoesion = new FlockCoesion()
-                {
-                    Flock = characters,
-                    Radius = COESION_RADIUS,
-                    FanAngle = COESION_FAN_ANGLE
-                };
-                this.blendedMovement.Movements.Add(new MovementWithWeight(flockCoesion, 5.0f));
-
-
-                //Flock velocity matching movement
-                var flockVelocityMatching = new FlockVelocityMatching()
-                {
-                    Flock = characters,
-                    Radius = COESION_RADIUS,
-                    FanAngle = COESION_FAN_ANGLE
-                };
-                this.blendedMovement.Movements.Add(new MovementWithWeight(flockVelocityMatching, 5.0f));*/
-            }
+				this.blendedMovement.Movements.Add(new MovementWithWeight(flockSeparation, 10.0f));
+			}
 
 		}
 
@@ -109,28 +89,18 @@ public class FlockCharacterController : MonoBehaviour
 			Radius = COESION_RADIUS,
 			FanAngle = COESION_FAN_ANGLE
 		};
-		this.blendedMovement.Movements.Add(new MovementWithWeight(flockCoesion, 5.0f));
+		this.blendedMovement.Movements.Add(new MovementWithWeight(flockCoesion, 8.0f));
 
 		var flockVelocityMatching = new FlockVelocityMatching() {
 			Flock = characters,
 			Radius = MATCHING_RADIUS,
 			FanAngle = MATCHING_FAN_ANGLE
 		};
-		this.blendedMovement.Movements.Add(new MovementWithWeight(flockVelocityMatching, 5.0f));
+		this.blendedMovement.Movements.Add(new MovementWithWeight(flockVelocityMatching, 8.0f));
 
 
-		// TODO: add your wander behaviour here!
-		//var wander = new DynamicWander {
-		//	MaxAcceleration = MAX_ACCELERATION,
-		//	WanderOffset = 5,
-		//	WanderRadius = 5.0f,
-		//	WanderRate = MathConstants.MATH_PI_4 / 3,
-		//	Character = this.character.KinematicData,
-		//	DebugColor = Color.yellow
-		//};
-		//this.blendedMovement.Movements.Add(new MovementWithWeight(wander, 1));
 		var straightAhead = new DynamicStraightAhead();
-		this.blendedMovement.Movements.Add(new MovementWithWeight(straightAhead, 1));
+		this.blendedMovement.Movements.Add(new MovementWithWeight(straightAhead, 0.1f));
 
 		this.character.Movement = this.blendedMovement; 
 	}

@@ -100,8 +100,8 @@ public class SceneManager : MonoBehaviour
 
 	private Vector3 GenerateRandomVelocity() {
 		var velocity = new Vector3();
-		velocity.x = Random.Range(0.0f, MAX_SPEED);
-		velocity.z = Random.Range(0.0f, MAX_SPEED);
+		velocity.x = Random.Range(-MAX_SPEED, MAX_SPEED);
+		velocity.z = Random.Range(-MAX_SPEED, MAX_SPEED);
 		if (velocity.sqrMagnitude > MAX_SPEED * MAX_SPEED) {
 			velocity.Normalize();
 			velocity *= MAX_SPEED;

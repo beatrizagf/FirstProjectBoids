@@ -24,8 +24,8 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
     {
         //this.CollisionDetector = new Collision();
         this.Target = new KinematicData();
-        this.AvoidMargin = 18.0f;
-        this.MaxLookAhead = 20.0f;
+        this.AvoidMargin = 4.0f;
+        this.MaxLookAhead = 10.0f;
         this.Obstacle = obstacle;
      }
 
