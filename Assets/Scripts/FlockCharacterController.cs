@@ -66,7 +66,7 @@ public class FlockCharacterController : MonoBehaviour
 				Character = this.character.KinematicData,
 				DebugColor = Color.magenta
 			};
-			this.blendedMovement.Movements.Add(new MovementWithWeight(avoidObstacleMovement, 15.0f));
+			this.blendedMovement.Movements.Add(new MovementWithWeight(avoidObstacleMovement, 150.0f));
 		}
 
 		foreach (var otherCharacter in characters)
@@ -81,7 +81,7 @@ public class FlockCharacterController : MonoBehaviour
 					AvoidMargin = 18.0f,
 					DebugColor = Color.cyan
 				};
-				this.blendedMovement.Movements.Add(new MovementWithWeight(avoidCharacter, 11.0f));
+				this.blendedMovement.Movements.Add(new MovementWithWeight(avoidCharacter, 25.0f));
 
 			}
 
@@ -97,6 +97,7 @@ public class FlockCharacterController : MonoBehaviour
         var flockSeparation = new FlockSeparation()
         {
             Flock = characters,
+            Character = this.character.KinematicData,
             MaxAcceleration = MAX_ACCELERATION,
             Radius = SEPARATION_RADIUS,
             SeparationFactor = SEPARATION_FACTOR,

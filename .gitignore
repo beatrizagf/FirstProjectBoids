@@ -119,3 +119,7 @@ Library/UnityAssemblies/SyntaxTree.VisualStudio.Unity.Bridge.xml
 *.xml
 *.xml
 Library/UnityAssemblies/SyntaxTree.VisualStudio.Unity.Bridge.xml
+*.dwlt
+Library/metadata/04/04f9157fd528e8c44887f7014073c212.info
+Library/metadata/0d/0d3bb855445e36e479c85976fc88383a
+*.xml
