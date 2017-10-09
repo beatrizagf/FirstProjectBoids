@@ -95,7 +95,7 @@ public class FlockCharacterController : MonoBehaviour
             //AvoidMargin = 18.0f,
             DebugColor = Color.cyan
         };
-        this.blendedMovement.Movements.Add(new MovementWithWeight(flockSeparation, 11.0f));
+        this.blendedMovement.Movements.Add(new MovementWithWeight(flockSeparation, 30.0f));
 
         var flockCoesion = new FlockCoesion() {
 			Character = this.character.KinematicData,
@@ -119,7 +119,7 @@ public class FlockCharacterController : MonoBehaviour
 
 
 		var straightAhead = new DynamicStraightAhead() { Character = this.character.KinematicData };
-		this.blendedMovement.Movements.Add(new MovementWithWeight(straightAhead, 2.5f));
+		this.blendedMovement.Movements.Add(new MovementWithWeight(straightAhead, 10.5f));
 
 		this.character.Movement = this.blendedMovement; 
 	}
