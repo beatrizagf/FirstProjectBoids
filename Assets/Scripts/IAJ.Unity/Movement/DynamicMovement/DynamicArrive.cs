@@ -7,15 +7,12 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement {
 		}
 
 		public float MaxSpeed { get; set; }
-		float StopRadius { get; set; }
-		float SlowRadius { get; set; }
+		public float StopRadius { get; set; }
+		public float SlowRadius { get; set; }
 		public KinematicData RealTarget { get; set; }
 
 		public DynamicArrive() {
 			Target = new KinematicData();
-			RealTarget = new KinematicData();
-			StopRadius = 3.0f;
-			SlowRadius = 30.0f;
 		}
 
 		public override MovementOutput GetMovement() {

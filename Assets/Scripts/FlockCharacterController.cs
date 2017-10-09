@@ -14,13 +14,15 @@ public class FlockCharacterController : MonoBehaviour
 	private const float MAX_ACCELERATION = 40.0f;
 	private const float MAX_SPEED = 20.0f;
 	private const float DRAG = 0.1f;
-	private const float AVOID_MARGIN = 4.0f;
+	private const float AVOID_MARGIN = 90.0f;
 	private const float MAX_LOOK_AHEAD = 10.0f;
-	private const float COESION_RADIUS = 15.0f;
-	private const float MATCHING_RADIUS = 20.0f;
-	private const float SEPARATION_RADIUS = 10.0f;
+	private const float COESION_RADIUS = 25.0f;
+	private const float MATCHING_RADIUS = 10.0f;
+	private const float SEPARATION_RADIUS = 15.0f;
 	private const float SEPARATION_FACTOR = MAX_ACCELERATION * 1.3f;
-	private const float COESION_FAN_ANGLE = MathConstants.MATH_PI_2;
+	private const float COESION_FAN_ANGLE = MathConstants.MATH_PI_4 * 3;
+	private const float ARRIVE_STOP_RADIUS = 8.0f;
+	private const float ARRIVE_SLOW_RADIUS = 30.0f;
 	private const float MATCHING_FAN_ANGLE = MathConstants.MATH_PI_2;
 
 
@@ -77,9 +79,21 @@ public class FlockCharacterController : MonoBehaviour
 					MaxAcceleration = MAX_ACCELERATION,
 					Radius = SEPARATION_RADIUS,
 					SeparationFactor = SEPARATION_FACTOR,
+					//CollisionRadius = 4.0f,
+					//AvoidMargin = 18.0f,
+				DebugColor = Color.cyan
+				};
+				this.blendedMovement.Movements.Add(new MovementWithWeight(flockSeparation, 11.0f));
+
+				var avoidCharacter = new DynamicAvoidCharacter(otherCharacter.KinematicData) {
+					Character = this.character.KinematicData,
+					MaxAcceleration = MAX_ACCELERATION,
+					CollisionRadius = 4.0f,
+					AvoidMargin = 18.0f,
 					DebugColor = Color.cyan
 				};
-				this.blendedMovement.Movements.Add(new MovementWithWeight(flockSeparation, 10.0f));
+				this.blendedMovement.Movements.Add(new MovementWithWeight(avoidCharacter, 11.0f));
+
 			}
 
 		}
@@ -87,20 +101,23 @@ public class FlockCharacterController : MonoBehaviour
 		var flockCoesion = new FlockCoesion() {
 			Flock = characters,
 			Radius = COESION_RADIUS,
-			FanAngle = COESION_FAN_ANGLE
-		};
-		this.blendedMovement.Movements.Add(new MovementWithWeight(flockCoesion, 8.0f));
+			FanAngle = COESION_FAN_ANGLE,
+			MaxSpeed = MAX_SPEED,
+			StopRadius = ARRIVE_STOP_RADIUS,
+			SlowRadius = ARRIVE_SLOW_RADIUS
+	};
+		this.blendedMovement.Movements.Add(new MovementWithWeight(flockCoesion, 12.0f));
 
 		var flockVelocityMatching = new FlockVelocityMatching() {
 			Flock = characters,
 			Radius = MATCHING_RADIUS,
 			FanAngle = MATCHING_FAN_ANGLE
 		};
-		this.blendedMovement.Movements.Add(new MovementWithWeight(flockVelocityMatching, 8.0f));
+		this.blendedMovement.Movements.Add(new MovementWithWeight(flockVelocityMatching, 4.0f));
 
 
 		var straightAhead = new DynamicStraightAhead();
-		this.blendedMovement.Movements.Add(new MovementWithWeight(straightAhead, 0.1f));
+		this.blendedMovement.Movements.Add(new MovementWithWeight(straightAhead, 2.5f));
 
 		this.character.Movement = this.blendedMovement; 
 	}

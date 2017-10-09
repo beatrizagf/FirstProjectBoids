@@ -31,20 +31,16 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
 
 
         public DynamicAvoidCharacter(KinematicData target)
-    {
-        this.Output = new MovementOutput();
-        this.OtherCharacter = target;
-        this.CollisionRadius = 4.0f;
-        this.AvoidMargin = 18.0f;
-
+		{
+			this.Output = new MovementOutput();
+			this.OtherCharacter = target;
         }
 
-        public override MovementOutput GetMovement()
-    {
+        public override MovementOutput GetMovement() {
 
-        this.DeltaPos = this.Character.Position - this.OtherCharacter.Position;
-        this.DeltaVel = this.Character.velocity - this.OtherCharacter.velocity;
-        this.DeltaSpeed = this.DeltaVel.magnitude;
+			this.DeltaPos = this.Character.Position - this.OtherCharacter.Position;
+			this.DeltaVel = this.Character.velocity - this.OtherCharacter.velocity;
+			this.DeltaSpeed = this.DeltaVel.magnitude;
 
 
             if (this.DeltaSpeed == 0) {
@@ -65,14 +61,11 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
                 return new MovementOutput();
             }
 
-            if (this.FutureDistance <= 0 || this.DeltaPos.magnitude < 2 * this.CollisionRadius)
-            {
+            if (this.FutureDistance <= 0 || this.DeltaPos.magnitude < 2 * this.CollisionRadius) {
                 //deals with exact or immediate collisions
                 this.Output.linear = this.Character.Position - this.OtherCharacter.Position;
 
-            }
-            else
-            {
+            } else {
                 this.Output.linear = FutureDeltaPos * -1;
             }
 
