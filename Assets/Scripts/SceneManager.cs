@@ -5,6 +5,7 @@ using Assets.Scripts.IAJ.Unity.Util;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
+using Assets.Scripts.IAJ.Unity.Movement.DynamicMovement;
 
 public class SceneManager : MonoBehaviour
 {
@@ -18,12 +19,13 @@ public class SceneManager : MonoBehaviour
     public GameObject mainCharacterGameObject;
     public GameObject characterGameObject;
 
-    private BlendedMovement Blended { get; set; }
+    //private BlendedMovement Blended { get; set; }
 
     private List<FlockCharacterController> characterControllers;
 
-	// Use this for initialization
-	void Start () 
+
+    // Use this for initialization
+    void Start () 
 	{
 		var textObj = GameObject.Find ("InstructionsText");
 		if (textObj != null) 
@@ -34,9 +36,9 @@ public class SceneManager : MonoBehaviour
 			//	this.mainCharacterController.priorityKey + " - Priority\n"+
              //   this.mainCharacterController.stopKey + " - Stop"; 
 		}
-	    
-        
-	    var obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
+
+
+        var obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
 
 	    this.characterControllers = this.CloneCharacters(this.characterGameObject, 50, obstacles);
         this.characterControllers.Add(this.characterGameObject.GetComponent<FlockCharacterController>());

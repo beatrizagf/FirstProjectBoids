@@ -7,8 +7,11 @@
             get { return "Seek"; }
         }
 
+        public KinematicData Mtaget { get; set; }
+
         public DynamicSeek()
         {
+            Target = new KinematicData();
             this.Output = new MovementOutput();
         }
 

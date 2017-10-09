@@ -5,6 +5,7 @@ using Assets.Scripts.IAJ.Unity.Movement.DynamicMovement;
 using Assets.Scripts.IAJ.Unity.Movement.Arbitration;
 using Assets.Scripts.IAJ.Unity.Movement.FlockMovement;
 using System.Collections.Generic;
+using Assets.Scripts.IAJ.Unity.Movement;
 
 public class FlockCharacterController : MonoBehaviour
 {
@@ -34,8 +35,16 @@ public class FlockCharacterController : MonoBehaviour
 
 	private Text movementTextText;
 
-	//early initialization
-	void Awake()
+    private Vector3 click = new Vector3();
+    private List<DynamicCharacter> characters { get; set; }
+    private DynamicCharacter BoidCharacter { get; set; }
+
+
+    // private List<DynamicGoToPosition> GoToPositionMovements { get; set; }
+
+
+    //early initialization
+    void Awake()
 	{
 		this.character = new DynamicCharacter(this.gameObject);
 		this.movementTextText = this.movementText.GetComponent<Text>();
@@ -104,7 +113,8 @@ public class FlockCharacterController : MonoBehaviour
 
 		}
 
-		var flockCoesion = new FlockCoesion() {
+
+        var flockCoesion = new FlockCoesion() {
 			Flock = characters,
 			Radius = COESION_RADIUS,
 			FanAngle = COESION_FAN_ANGLE
@@ -136,24 +146,95 @@ public class FlockCharacterController : MonoBehaviour
 	}
 
 
-	void Update()
-	{
-		if (Input.GetKeyDown(this.stopKey))
-		{
-			this.character.Movement = null;
-		}
-		else if (Input.GetKeyDown(this.blendedKey))
-		{
-			this.character.Movement = this.blendedMovement;
-		}
+    void Update()
+    {
+        Camera camera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        bool buttonPressed = false;
+        float seekRadius = 5.0f;
+
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            this.BoidCharacter.Movement = null;
+        }
+        else if (Input.GetKeyDown(KeyCode.B))
+        {
+            this.BoidCharacter.Movement = this.blendedMovement;
+        }
+
+        if (Input.GetMouseButton(0))
+        {
+            var mousePos = Input.mousePosition;
+            mousePos.z = 55.8f;
+            click = camera.ScreenToWorldPoint(mousePos);
+            buttonPressed = true;
+        }
+
+        foreach (var character in characters)
+        {
+            BlendedMovement movement = (BlendedMovement)character.Movement;
+            MovementWithWeight seekSearch = movement.Movements.Find(x => x.Movement.Name == "Seek");
+
+            MovementWithWeight straigthSearch = movement.Movements.Find(x => x.Movement.Name == "StraightAhead");
+
+            var clickToCharacter = character.KinematicData.Position - click;
+
+            if (buttonPressed)
+            {
+                if (clickToCharacter.magnitude <= seekRadius)
+                {
+                    if (straigthSearch != null)
+                    {
+                        movement.Movements.Remove(straigthSearch);
+                    }
+
+                    var DynamicSeekMovement = new DynamicSeek()
+                    {
+                        Character = character.KinematicData,
+                        MaxAcceleration = MAX_ACCELERATION,
+                        DebugColor = Color.blue,
+                        Target = new KinematicData()
+                };
+
+                    if (seekSearch != null)
+                    {
+                        movement.Movements.Remove(seekSearch);
+                    }
+
+                    DynamicSeekMovement.Target.Position = click;
+                    DynamicSeekMovement.Target.Position = character.KinematicData.Position;
+                    movement.Movements.Add(new MovementWithWeight(DynamicSeekMovement, 5.0f));
+
+                    character.Movement = movement;
+                }
+
+            }
+            else
+            {
+                if (seekSearch != null)
+                {
+
+                    if (clickToCharacter.magnitude > seekRadius)
+                    {
+                        movement.Movements.Remove(seekSearch);
+                        var straight = new DynamicStraightAhead
+                        {
+                            Character = this.BoidCharacter.KinematicData,
+                            MaxAcceleration = MAX_ACCELERATION,
+                        };
+                        movement.Movements.Add(new MovementWithWeight(straight, 1.9f));
+                    }
+
+                }
+            }
+
+        }
+        this.UpdateMovingGameObject();
+
+        this.UpdateMovementText();
+    }
 
 
-		this.UpdateMovingGameObject();
-		this.UpdateMovementText();
-	}
-
-
-	void OnDrawGizmos()
+    void OnDrawGizmos()
 	{
 		//TODO: this code is not working, try to figure it out
 		if (this.character != null && this.character.Movement != null)
@@ -183,7 +264,9 @@ public class FlockCharacterController : MonoBehaviour
 		}
 	}
 
-	private void UpdateMovementText()
+
+
+    private void UpdateMovementText()
 	{
 		if (this.character.Movement == null)
 		{
