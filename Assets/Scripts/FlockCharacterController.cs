@@ -76,19 +76,6 @@ public class FlockCharacterController : MonoBehaviour
 		{
 			if (otherCharacter != this.character)
 			{
-<<<<<<< HEAD
-				//Flock separation movement
-				var flockSeparation = new FlockSeparation(otherCharacter.KinematicData) {
-					Character = this.character.KinematicData,
-					MaxAcceleration = MAX_ACCELERATION,
-					Radius = SEPARATION_RADIUS,
-					SeparationFactor = SEPARATION_FACTOR,
-				DebugColor = Color.cyan
-				};
-				this.blendedMovement.Movements.Add(new MovementWithWeight(flockSeparation, 11.0f));
-=======
->>>>>>> 43ed069c67b44fa2610a2de00b1bf734df288f59
-
 				var avoidCharacter = new DynamicAvoidCharacter(otherCharacter.KinematicData) {
 					Character = this.character.KinematicData,
 					MaxAcceleration = MAX_ACCELERATION,
@@ -97,7 +84,6 @@ public class FlockCharacterController : MonoBehaviour
 					DebugColor = Color.cyan
 				};
 				this.blendedMovement.Movements.Add(new MovementWithWeight(avoidCharacter, 11.0f));
-
 			}
 
 		}
