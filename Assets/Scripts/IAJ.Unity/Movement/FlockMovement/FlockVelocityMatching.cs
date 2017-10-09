@@ -31,6 +31,7 @@ namespace Assets.Scripts.IAJ.Unity.Movement.FlockMovement {
 			}
 			if (closeBoids == 0) return new MovementOutput();
 			averageVelocity /= closeBoids;
+			this.Target = new KinematicData();
 			this.Target.velocity = averageVelocity;
 			return base.GetMovement();
 		}

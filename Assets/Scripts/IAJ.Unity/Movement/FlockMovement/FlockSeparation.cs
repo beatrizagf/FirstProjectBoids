@@ -6,15 +6,14 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
 
     public class FlockSeparation : DynamicMovement
     {
-        public List<DynamicCharacter> Flock;
-
         //in order to no collide with each other
         public override string Name
         {
             get { return "FlockSeparation"; }
         }
 
-        public float Radius { get; set; }
+		public List<DynamicCharacter> Flock;
+		public float Radius { get; set; }
         public float SeparationFactor { get; set; }
 
         public FlockSeparation()
@@ -38,16 +37,13 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
                         float SeparationStrength = Mathf.Min(this.SeparationFactor / (Direction.magnitude * Direction.magnitude), MaxAcceleration);
                         this.Output.linear += Direction.normalized * SeparationStrength;
                     }
-
-                    if (this.Output.linear.magnitude > this.MaxAcceleration)
-                    {
-                        this.Output.linear = this.Output.linear.normalized;
-                        this.Output.linear *= this.MaxAcceleration;
-                    }
-
                 }
             }
-            return this.Output;
+			if (this.Output.linear.magnitude > this.MaxAcceleration) {
+				this.Output.linear = this.Output.linear.normalized;
+				this.Output.linear *= this.MaxAcceleration;
+			}
+			return this.Output;
 
         }
     }

@@ -12,7 +12,6 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement {
 		public KinematicData RealTarget { get; set; }
 
 		public DynamicArrive() {
-			Target = new KinematicData();
 		}
 
 		public override MovementOutput GetMovement() {
@@ -29,7 +28,7 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement {
 			} else {
 				targetSpeed = MaxSpeed * (distance / SlowRadius);
 			}
-
+			Target = new KinematicData();
 			Target.velocity = direction.normalized * targetSpeed;
 
 

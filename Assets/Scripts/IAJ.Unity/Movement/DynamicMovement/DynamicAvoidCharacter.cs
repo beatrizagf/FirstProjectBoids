@@ -4,75 +4,120 @@ using UnityEngine;
 
 namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
 {
-    public class DynamicAvoidCharacter : DynamicMovement
-{
-    
+	public class DynamicAvoidCharacter : DynamicMovement {
+	
 
-    public override string Name
-    {
-        get { return "Avoid Character"; }
-    }
-    
-    public Vector3 DeltaPos { get; set; }
-    public Vector3 DeltaVel { get; set; }
-    public float DeltaSpeed { get; set; }
-    public float TimeToClosest { get; set; }
-    public Vector3 FutureDeltaPos { get; set; }
-    public float FutureDistance { get; set; }
-    public float CollisionRadius { get; set; }
-    public float AvoidMargin { get; set; }
-    public KinematicData OtherCharacter { get; set; }
+		public override string Name {
+			get { return "Avoid Character"; }
+		}
+
+		//public float TimeToClosest { get; set; }
+		//public Vector3 FutureDeltaPos { get; set; }
+		//public float AvoidMargin { get; set; }
+
+
+		public float CollisionRadius { get; set; }
+		public float MaxTimeLookAhead { get; set; }
+		public List<DynamicCharacter> Flock;
 
 
 
-
-
-
-
-
-        public DynamicAvoidCharacter(KinematicData target)
+		public DynamicAvoidCharacter()
 		{
 			this.Output = new MovementOutput();
-			this.OtherCharacter = target;
-        }
-
-        public override MovementOutput GetMovement() {
-
-			this.DeltaPos = this.Character.Position - this.OtherCharacter.Position;
-			this.DeltaVel = this.Character.velocity - this.OtherCharacter.velocity;
-			this.DeltaSpeed = this.DeltaVel.magnitude;
 
 
-            if (this.DeltaSpeed == 0) {
-                return this.Output;
-            }
+			Target = new KinematicData();
+			Character = new KinematicData();
+		}
 
-            this.TimeToClosest = -Vector3.Dot(this.DeltaPos,this.DeltaVel)/(this.DeltaSpeed*this.DeltaSpeed);
+		public override MovementOutput GetMovement() {
 
-            if (this.TimeToClosest > AvoidMargin) {
-                return this.Output;
-            }
+			//Vector3 deltaPos = new Vector3();
+			//Vector3 deltaVel = new Vector3();
+			//float deltaSpeed;
+			//float futureDistance;
 
-            this.FutureDeltaPos = this.DeltaPos + this.DeltaVel * this.TimeToClosest;
-
-            this.FutureDistance = this.FutureDeltaPos.magnitude;
-
-            if (this.FutureDistance > 2*this.CollisionRadius) {
-                return new MovementOutput();
-            }
-
-            if (this.FutureDistance <= 0 || this.DeltaPos.magnitude < 2 * this.CollisionRadius) {
-                //deals with exact or immediate collisions
-                this.Output.linear = this.Character.Position - this.OtherCharacter.Position;
-
-            } else {
-                this.Output.linear = FutureDeltaPos * -1;
-            }
-
-            this.Output.linear = this.Output.linear.normalized * MaxAcceleration;
+			//deltaPos = this.Character.Position - this.Target.Position;
+			//deltaVel = this.Character.velocity - this.Target.velocity;
+			//deltaSpeed = deltaVel.magnitude;
 
 
-        return this.Output;
-    }
-}
+			//if (deltaSpeed == 0) {
+			//	return this.Output;
+			//}
+
+			//this.TimeToClosest = -Vector3.Dot(deltaPos, deltaVel)/(deltaSpeed * deltaSpeed);
+
+			//if (this.TimeToClosest > AvoidMargin) {
+			//	return this.Output;
+			//}
+
+			//this.FutureDeltaPos = deltaPos + deltaVel * this.TimeToClosest;
+
+			//futureDistance = this.FutureDeltaPos.magnitude;
+
+			//if (futureDistance > 2*this.CollisionRadius) {
+			//	return new MovementOutput();
+			//}
+
+			//if (futureDistance <= 0 || deltaPos.magnitude < 2 * this.CollisionRadius) {
+			//	//deals with exact or immediate collisions
+			//	this.Output.linear = this.Character.Position - this.Target.Position;
+
+			//} else {
+			//	this.Output.linear = FutureDeltaPos * -1;
+			//}
+
+			//this.Output.linear = this.Output.linear.normalized * MaxAcceleration;
+
+
+			//return this.Output;
+
+			float shortestTime = 9999999;
+			Vector3 deltaPos;
+			Vector3 deltaVel;
+			float deltaSpeed;
+			float timeToClosest;
+			Vector3 futureDeltaPos;
+			float futureDistance;
+			KinematicData closestTarget = new KinematicData();
+			float closestFutureDistance = 9999999;
+			Vector3 closestFutureDeltaPos = new Vector3();
+			Vector3 closestDeltaPos = new Vector3();
+			Vector3 closestDeltaVel;
+			Vector3 avoidanceDirection = new Vector3();
+
+			foreach (var boid in Flock) {
+				deltaPos = Target.Position - Character.Position;
+				deltaVel = Target.velocity - Character.velocity;
+				deltaSpeed = deltaVel.magnitude;
+				if (deltaSpeed == 0) continue;
+				timeToClosest = -(Vector3.Dot(deltaPos, deltaVel)) / (deltaSpeed * deltaSpeed);
+				if (timeToClosest > MaxTimeLookAhead) continue;
+				futureDeltaPos = deltaPos + deltaVel * timeToClosest;
+				futureDistance = futureDeltaPos.magnitude;
+				if (futureDistance > 2 * CollisionRadius) continue;
+
+
+				if (timeToClosest > 0 && timeToClosest < shortestTime) {
+					shortestTime = timeToClosest;
+					closestTarget = Target;
+					closestFutureDistance = futureDistance;
+					closestFutureDeltaPos = futureDeltaPos;
+					closestDeltaPos = deltaPos;
+					closestDeltaVel = deltaVel;
+				}
+			}
+			if (shortestTime == 9999999) return new MovementOutput();
+			if (closestFutureDistance <= 0 || closestDeltaPos.magnitude < 2 * CollisionRadius) {
+				avoidanceDirection = Character.Position - closestTarget.Position;
+			} else {
+				avoidanceDirection = closestFutureDeltaPos * -1;
+			}
+			Output = new MovementOutput();
+			Output.linear = avoidanceDirection.normalized * MaxAcceleration;
+			return this.Output;
+		}
+	}
 }
