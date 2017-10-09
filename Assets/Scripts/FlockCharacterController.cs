@@ -89,14 +89,18 @@ public class FlockCharacterController : MonoBehaviour
 		}
 
         var mouseSeek = new GoToMouse() {
-            MaxAcceleration = MAX_ACCELERATION
+			Character = this.character.KinematicData,
+
+			MaxAcceleration = MAX_ACCELERATION
         };
         this.blendedMovement.Movements.Add(new MovementWithWeight(mouseSeek, 10.5f));
 
         //Flock separation movement
         var flockSeparation = new FlockSeparation()
         {
-            Flock = characters,
+			Character = this.character.KinematicData,
+
+			Flock = characters,
             MaxAcceleration = MAX_ACCELERATION,
             Radius = SEPARATION_RADIUS,
             SeparationFactor = SEPARATION_FACTOR,
@@ -107,6 +111,7 @@ public class FlockCharacterController : MonoBehaviour
         this.blendedMovement.Movements.Add(new MovementWithWeight(flockSeparation, 11.0f));
 
         var flockCoesion = new FlockCoesion() {
+			Character = this.character.KinematicData,
 			Flock = characters,
 			CRadius = COESION_RADIUS,
 			FanAngle = COESION_FAN_ANGLE,
@@ -117,6 +122,7 @@ public class FlockCharacterController : MonoBehaviour
 		this.blendedMovement.Movements.Add(new MovementWithWeight(flockCoesion, 12.0f));
 
 		var flockVelocityMatching = new FlockVelocityMatching() {
+			Character = this.character.KinematicData,
 			Flock = characters,
 			Radius = MATCHING_RADIUS,
 			FanAngle = MATCHING_FAN_ANGLE
@@ -124,7 +130,7 @@ public class FlockCharacterController : MonoBehaviour
 		this.blendedMovement.Movements.Add(new MovementWithWeight(flockVelocityMatching, 4.0f));
 
 
-		var straightAhead = new DynamicStraightAhead();
+		var straightAhead = new DynamicStraightAhead() { Character = this.character.KinematicData };
 		this.blendedMovement.Movements.Add(new MovementWithWeight(straightAhead, 2.5f));
 
 		this.character.Movement = this.blendedMovement; 
