@@ -112,17 +112,19 @@ public class FlockCharacterController : MonoBehaviour
 		};
 		this.blendedMovement.Movements.Add(new MovementWithWeight(flockVelocityMatching, 5.0f));
 
-		
-		 // TODO: add your wander behaviour here!
-		var wander = new DynamicWander {
-			MaxAcceleration = MAX_ACCELERATION,
-			WanderOffset = 5,
-			WanderRadius = 5.0f,
-			WanderRate = MathConstants.MATH_PI_4 / 3,
-			Character = this.character.KinematicData,
-			DebugColor = Color.yellow
-		};
-		this.blendedMovement.Movements.Add(new MovementWithWeight(wander, 1));
+
+		// TODO: add your wander behaviour here!
+		//var wander = new DynamicWander {
+		//	MaxAcceleration = MAX_ACCELERATION,
+		//	WanderOffset = 5,
+		//	WanderRadius = 5.0f,
+		//	WanderRate = MathConstants.MATH_PI_4 / 3,
+		//	Character = this.character.KinematicData,
+		//	DebugColor = Color.yellow
+		//};
+		//this.blendedMovement.Movements.Add(new MovementWithWeight(wander, 1));
+		var straightAhead = new DynamicStraightAhead();
+		this.blendedMovement.Movements.Add(new MovementWithWeight(straightAhead, 1));
 
 		this.character.Movement = this.blendedMovement; 
 	}
@@ -151,17 +153,17 @@ public class FlockCharacterController : MonoBehaviour
 		if (this.character != null && this.character.Movement != null)
 		{
 			//for blending movement
-			if (this.character.Movement == this.blendedMovement)
-			{
-				var blender = this.character.Movement as BlendedMovement;
-				var wander = blender.Movements.Find(x => x.Movement is DynamicWander).Movement as DynamicWander;
+			//if (this.character.Movement == this.blendedMovement)
+			//{
+			//	var blender = this.character.Movement as BlendedMovement;
+			//	var wander = blender.Movements.Find(x => x.Movement is DynamicWander).Movement as DynamicWander;
 
-				if (wander != null)
-				{
-					Gizmos.color = Color.blue;
-					Gizmos.DrawWireSphere(wander.CircleCenter, wander.WanderRadius);
-				}
-			}
+			//	if (wander != null)
+			//	{
+			//		Gizmos.color = Color.blue;
+			//		Gizmos.DrawWireSphere(wander.CircleCenter, wander.WanderRadius);
+			//	}
+			//}
 
 		}
 	}
