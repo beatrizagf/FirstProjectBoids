@@ -98,7 +98,14 @@ public class FlockCharacterController : MonoBehaviour
 
 		}
 
-		var flockCoesion = new FlockCoesion() {
+        var mouseSeek = new GoToMouse()
+        {
+            MaxAcceleration = MAX_ACCELERATION
+        };
+        this.blendedMovement.Movements.Add(new MovementWithWeight(mouseSeek, 10.5f));
+
+
+        var flockCoesion = new FlockCoesion() {
 			Flock = characters,
 			Radius = COESION_RADIUS,
 			FanAngle = COESION_FAN_ANGLE,
