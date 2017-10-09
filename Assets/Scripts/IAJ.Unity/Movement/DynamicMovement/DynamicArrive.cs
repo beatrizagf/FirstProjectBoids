@@ -13,6 +13,7 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement {
 
 		public DynamicArrive() {
 			Target = new KinematicData();
+			RealTarget = new KinematicData();
 			StopRadius = 3.0f;
 			SlowRadius = 30.0f;
 		}
