@@ -19,8 +19,6 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
 
 
 		public FlockSeparation(KinematicData otherCharacter) {
-			this.Radius = 1.0f;
-			this.SeparationFactor = 1.0f;
 			this.Boid = otherCharacter;
 			this.Output = new MovementOutput();
 		}

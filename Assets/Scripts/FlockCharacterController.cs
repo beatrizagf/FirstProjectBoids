@@ -17,7 +17,11 @@ public class FlockCharacterController : MonoBehaviour
 	private const float AVOID_MARGIN = 18.0f;
 	private const float MAX_LOOK_AHEAD = 20.0f;
 	private const float COESION_RADIUS = 5.0f;
+	private const float MATCHING_RADIUS = 5.0f;
+	private const float SEPARATION_RADIUS = 5.0f;
+	private const float SEPARATION_FACTOR = 5.0f;
 	private const float COESION_FAN_ANGLE = MathConstants.MATH_PI_2;
+	private const float MATCHING_FAN_ANGLE = MathConstants.MATH_PI_2;
 
 
 	public KeyCode stopKey = KeyCode.S;
@@ -72,6 +76,8 @@ public class FlockCharacterController : MonoBehaviour
 				{
 					Character = this.character.KinematicData,
 					MaxAcceleration = MAX_ACCELERATION,
+					Radius = SEPARATION_RADIUS,
+					SeparationFactor = SEPARATION_FACTOR,
 					DebugColor = Color.cyan
 				};
 				this.blendedMovement.Movements.Add(new MovementWithWeight(flockSeparation, 5.0f));
@@ -107,8 +113,8 @@ public class FlockCharacterController : MonoBehaviour
 
 		var flockVelocityMatching = new FlockVelocityMatching() {
 			Flock = characters,
-			Radius = COESION_RADIUS,
-			FanAngle = COESION_FAN_ANGLE
+			Radius = MATCHING_RADIUS,
+			FanAngle = MATCHING_FAN_ANGLE
 		};
 		this.blendedMovement.Movements.Add(new MovementWithWeight(flockVelocityMatching, 5.0f));
 
