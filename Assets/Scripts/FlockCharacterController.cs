@@ -5,6 +5,7 @@ using Assets.Scripts.IAJ.Unity.Movement.DynamicMovement;
 using Assets.Scripts.IAJ.Unity.Movement.Arbitration;
 using Assets.Scripts.IAJ.Unity.Movement.FlockMovement;
 using System.Collections.Generic;
+using Assets.Scripts.IAJ.Unity.Movement;
 
 public class FlockCharacterController : MonoBehaviour
 {
@@ -69,7 +70,7 @@ public class FlockCharacterController : MonoBehaviour
 				Character = this.character.KinematicData,
 				DebugColor = Color.magenta
 			};
-			this.blendedMovement.Movements.Add(new MovementWithWeight(avoidObstacleMovement, 150.0f));
+			this.blendedMovement.Movements.Add(new MovementWithWeight(avoidObstacleMovement, 50.0f));
 		}
 
 
@@ -81,12 +82,6 @@ public class FlockCharacterController : MonoBehaviour
 			DebugColor = Color.cyan
 		};
 		this.blendedMovement.Movements.Add(new MovementWithWeight(avoidCharacter, 25.0f));
-
-        var mouseSeek = new GoToMouse() {
-			Character = this.character.KinematicData,
-			MaxAcceleration = MAX_ACCELERATION
-        };
-        this.blendedMovement.Movements.Add(new MovementWithWeight(mouseSeek, 10.5f));
 
         //Flock separation movement
         var flockSeparation = new FlockSeparation()
@@ -141,6 +136,29 @@ public class FlockCharacterController : MonoBehaviour
 			this.character.Movement = this.blendedMovement;
 		}
 
+		Camera camera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+		// bool buttonPressed = false;
+		//float seekRadius = 5.0f;
+		//List<DynamicCharacter> characters;
+
+		var DynamicArriveMovement = new GoToMouse() {
+			Character = this.character.KinematicData,
+			MaxAcceleration = MAX_ACCELERATION,
+			MaxSpeed = MAX_SPEED,
+			StopRadius = ARRIVE_STOP_RADIUS,
+			SlowRadius = ARRIVE_SLOW_RADIUS
+		};
+
+		if (Input.GetMouseButton(0)) {
+			var mousePos = Input.mousePosition;
+			mousePos.z = 55.8f;
+			var click = camera.ScreenToWorldPoint(mousePos);
+			// buttonPressed = true;
+
+			DynamicArriveMovement.RealTarget = new KinematicData();
+			DynamicArriveMovement.RealTarget.Position = click;
+			this.blendedMovement.Movements.Add(new MovementWithWeight(DynamicArriveMovement, 10.0f));
+		}
 
 		this.UpdateMovingGameObject();
 		this.UpdateMovementText();
