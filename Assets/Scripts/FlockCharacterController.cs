@@ -14,6 +14,7 @@ public class FlockCharacterController : MonoBehaviour
 	private const float MAX_ACCELERATION = 40.0f;
 	private const float MAX_SPEED = 20.0f;
 	private const float DRAG = 0.1f;
+	private const float AVOID_COLLISION_RADIUS = 4.0f;
 	private const float AVOID_MARGIN = 90.0f;
 	private const float MAX_LOOK_AHEAD = 10.0f;
 	private const float COESION_RADIUS = 25.0f;
@@ -23,7 +24,9 @@ public class FlockCharacterController : MonoBehaviour
 	private const float COESION_FAN_ANGLE = MathConstants.MATH_PI_4 * 3;
 	private const float ARRIVE_STOP_RADIUS = 8.0f;
 	private const float ARRIVE_SLOW_RADIUS = 30.0f;
-	private const float MATCHING_FAN_ANGLE = MathConstants.MATH_PI_2;
+	private const float MATCHING_FAN_ANGLE = MathConstants.MATH_PI_4 * 3;
+
+	
 
 
 	public KeyCode stopKey = KeyCode.S;
@@ -73,12 +76,11 @@ public class FlockCharacterController : MonoBehaviour
 		{
 			if (otherCharacter != this.character)
 			{
-
 				var avoidCharacter = new DynamicAvoidCharacter(otherCharacter.KinematicData) {
 					Character = this.character.KinematicData,
 					MaxAcceleration = MAX_ACCELERATION,
-					CollisionRadius = 4.0f,
-					AvoidMargin = 18.0f,
+					CollisionRadius = AVOID_COLLISION_RADIUS,
+					AvoidMargin = AVOID_MARGIN,
 					DebugColor = Color.cyan
 				};
 				this.blendedMovement.Movements.Add(new MovementWithWeight(avoidCharacter, 25.0f));
@@ -87,9 +89,10 @@ public class FlockCharacterController : MonoBehaviour
 
 		}
 
-        var mouseSeek = new GoToMouse()
-        {
-            MaxAcceleration = MAX_ACCELERATION
+        var mouseSeek = new GoToMouse() {
+			Character = this.character.KinematicData,
+
+			MaxAcceleration = MAX_ACCELERATION
         };
         this.blendedMovement.Movements.Add(new MovementWithWeight(mouseSeek, 10.5f));
 
@@ -98,6 +101,7 @@ public class FlockCharacterController : MonoBehaviour
         {
             Flock = characters,
             Character = this.character.KinematicData,
+
             MaxAcceleration = MAX_ACCELERATION,
             Radius = SEPARATION_RADIUS,
             SeparationFactor = SEPARATION_FACTOR,
@@ -108,8 +112,9 @@ public class FlockCharacterController : MonoBehaviour
         this.blendedMovement.Movements.Add(new MovementWithWeight(flockSeparation, 11.0f));
 
         var flockCoesion = new FlockCoesion() {
+			Character = this.character.KinematicData,
 			Flock = characters,
-			Radius = COESION_RADIUS,
+			CRadius = COESION_RADIUS,
 			FanAngle = COESION_FAN_ANGLE,
 			MaxSpeed = MAX_SPEED,
 			StopRadius = ARRIVE_STOP_RADIUS,
@@ -118,6 +123,7 @@ public class FlockCharacterController : MonoBehaviour
 		this.blendedMovement.Movements.Add(new MovementWithWeight(flockCoesion, 12.0f));
 
 		var flockVelocityMatching = new FlockVelocityMatching() {
+			Character = this.character.KinematicData,
 			Flock = characters,
 			Radius = MATCHING_RADIUS,
 			FanAngle = MATCHING_FAN_ANGLE
@@ -125,7 +131,7 @@ public class FlockCharacterController : MonoBehaviour
 		this.blendedMovement.Movements.Add(new MovementWithWeight(flockVelocityMatching, 4.0f));
 
 
-		var straightAhead = new DynamicStraightAhead();
+		var straightAhead = new DynamicStraightAhead() { Character = this.character.KinematicData };
 		this.blendedMovement.Movements.Add(new MovementWithWeight(straightAhead, 2.5f));
 
 		this.character.Movement = this.blendedMovement; 
