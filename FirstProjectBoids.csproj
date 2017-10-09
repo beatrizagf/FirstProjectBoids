@@ -93,6 +93,7 @@
     <Compile Include="Assets\Scripts\IAJ.Unity\Movement\FlockMovement\FlockCoesion.cs" />
     <Compile Include="Assets\Scripts\IAJ.Unity\Movement\FlockMovement\FlockSeparation.cs" />
     <Compile Include="Assets\Scripts\IAJ.Unity\Movement\FlockMovement\FlockVelocityMatching.cs" />
+    <Compile Include="Assets\Scripts\IAJ.Unity\Movement\FlockMovement\GoToMouse.cs" />
     <Compile Include="Assets\Scripts\IAJ.Unity\Movement\KinematicData.cs" />
     <Compile Include="Assets\Scripts\IAJ.Unity\Movement\Movement.cs" />
     <Compile Include="Assets\Scripts\IAJ.Unity\Movement\MovementOutput.cs" />
