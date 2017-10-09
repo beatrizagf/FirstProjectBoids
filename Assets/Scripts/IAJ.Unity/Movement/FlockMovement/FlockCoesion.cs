@@ -8,7 +8,7 @@ using System;
 namespace Assets.Scripts.IAJ.Unity.Movement.FlockMovement {
 	public class FlockCoesion : DynamicArrive {
 		public List<DynamicCharacter> Flock;
-		public float Radius;
+		public float CRadius;
 		public float FanAngle;
 
 		public FlockCoesion() {
@@ -26,7 +26,7 @@ namespace Assets.Scripts.IAJ.Unity.Movement.FlockMovement {
 				if (Character != boid) {
 					direction = boid.Position;
 					direction -= Character.Position;
-					if (direction.magnitude <= Radius) {
+					if (direction.magnitude <= CRadius) {
 						var angle = MathHelper.ConvertVectorToOrientation(direction);
 						var angleDifference = MathHelper.ShortestAngleDifference(Character.Orientation, angle);
 						if (Math.Abs(angleDifference) <= FanAngle) {
